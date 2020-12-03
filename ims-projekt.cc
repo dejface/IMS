@@ -9,6 +9,10 @@ using namespace std;
 
 #define ROWS 10
 #define COLUMNS 20
+#define FORBIDDEN_SITTING -1
+#define HEALTHY 0
+#define INFECTED 1
+
 
 int infected = 10;
 bool masks = false;
@@ -51,12 +55,31 @@ void modifyCinema(int cinema[][COLUMNS]){
     for (int i = 0; i < ROWS; i++){
         for (int j = 0; j < COLUMNS; j++){
             if (((j % 2 == 0) && (i % 2 == 0))){
-                cinema[i][j] = -1;
+                cinema[i][j] = FORBIDDEN_SITTING;
             } else if (((j % 2 == 1) && (i % 2 == 1))){
-                cinema[i][j] = -1;
+                cinema[i][j] = FORBIDDEN_SITTING;
             }
         }
     }
+}
+
+
+int getStateOfNeighbors(int cinema[][COLUMNS], int row, int column){
+    int infectedCount = 0;
+    for (int r = row - 1; r <= row + 1; r++){
+        for (int c = column - 1; c <= column + 1; c++){
+            if (r < 0) {
+                continue;
+            } else if (c < 0) {
+                continue;
+            }
+            if (r == row && c == column) continue;
+            if (cinema[r][c] == INFECTED){
+                infectedCount++;
+            }
+        }
+    }
+    return infectedCount;
 }
 
 int main(int argc, char **argv){
@@ -79,13 +102,21 @@ int main(int argc, char **argv){
     while (count != 0){
         int x = rand()%ROWS;
         int y = rand()%COLUMNS;
-        if (cinema[x][y] == 0) {
-            cinema[x][y] = 1;
+        if (cinema[x][y] == HEALTHY) {
+            cinema[x][y] = INFECTED;
         } else {
             count++;
         }
         count--;
     }
+
+    for (int i = 0; i < ROWS; i++){
+        for (int j = 0; j < COLUMNS; j++){
+            int x = getStateOfNeighbors(cinema, i, j);
+            cout << "Riadok " << i << ". Stlpec " << j << ". Nakazeni v okoli: " << x << endl;
+        }
+    }
+
     for (int i = 0; i < ROWS; ++i){
         for (int j = 0; j < COLUMNS; ++j){
             cout << cinema[i][j] << ' ';
