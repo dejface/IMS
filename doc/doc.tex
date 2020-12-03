@@ -1,0 +1,78 @@
+\documentclass[a4paper, 11pt]{article}
+
+
+\usepackage[slovak]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[left=2cm, top=3cm, text={17cm, 24cm}]{geometry}
+\usepackage{times}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage{graphicx} 
+\usepackage[unicode]{hyperref}
+\usepackage{listings}
+\usepackage{color}
+
+
+\begin{document}
+
+	\begin{titlepage}
+		\begin{center}
+			\Huge
+			\textsc{Vysoké učení technické v~Brně} \\
+			\huge
+			\textsc{Fakulta informačních technologií} \\
+			\vspace{\stretch{0.382}}
+			\begin{figure}[h]
+                \centering
+                \scalebox{0.6}{\includegraphics{logo.eps}}
+            \end{figure}
+			\LARGE
+			Projektová dokumentácia k~predmetu IMS \\
+			\Huge
+			Zadanie č. 3 - Epidemiologické modely - mikro-úroveň
+			\vspace{\stretch{0.618}}
+		\end{center}
+
+		{\Large
+			\today
+			\hfill
+			\begin{tabular}{r}
+			Dávid Oravec (xorave05) \\
+			Dominik Boboš (xbobos00)
+			\end{tabular}
+		}
+	\end{titlepage}
+	\newpage
+	
+	\tableofcontents
+	\newpage
+	
+	\section{Úvod}
+	\par Pre vytvorenie epidemiologického modelu, sme si vybrali ochorenie COVID-19. Je to infekčné ochorenie vyvolané koronavírusom SARS-CoV-2, ktorý patrí do rodu Betacoronavirus. Prvý oficiálne potrvdený prípad sa datuje na 8. december 2019, aj keď niektoré nepotvrdené zdroje uvádzajú 17. november 2019. \cite{guardian}
+	\newline
+	
+	\par Ochorenie postihlo celý svet a tak po roku od prvého prípadu sa stále nachádza v pandemickej kríze. COVID-19 zasiahol do života ľudí a v boji proti tejto pandémii musia vlády všetkých krajín zavádzať opatrenia, ktoré pomôžu zabrániť šíreniu. Väčšina týchto opatrení má devastačné následky v oblasti ekonomiky, kultúry, športu, ale aj psychického zdravia ľudí.
+	\newline
+	
+	\par V súvislosti s touto problematikou sme sa rozhodli zamerať na skúmanie šírenia koronavírusu v oblasti kultúry, konrétne kinematografie. Našim cieľom je zistiť, akým spôsobom sa vírus môže šíriť medzi ľuďmi, ktorí sú uzavretí v realtívne malom priestore (kinosále) a ako znížiť riziko nákazy bez potreby zavádzania drastických opatrení.
+	
+	\subsection{Zdroje faktov}
+	    \subsubsection{Autori}
+	    \begin{itemize}
+	        \item Dominik Boboš (\href{mailto:xbobos00@stud.fit.vutbr.cz}{xbobos00@stud.fit.vutbr.cz})
+	        \item Dávid Oravec (\href{mailto:xorave05@stud.fit.vutbr.cz}{xorave05@stud.fit.vutbr.cz})
+	    \end{itemize}
+	    
+	    \subsubsection{Literatúra}
+	    Ako primárny zdroj pre našu štúdiu a zároveň \uv{odrazový mostík} sme použili \cite{maxbrenner2020} spolu s literárnymi zdrojmi na ktoré sa v štúdii odkazuje.
+	    
+	    Ostatné literárne zdroje sú uvedené v sekcii \hyperref[sec:bib]{Bibliografia}
+	
+	
+	\newpage
+    \bibliographystyle{czechiso}
+    \renewcommand{\refname}{Bibliografia}
+    \label{sec:bib}
+    \bibliography{ims}
+
+\end{document}
