@@ -63,42 +63,80 @@ void modifyCinema(int cinema[][COLUMNS]){
     }
 }
 
+/* zisti stav aktualne spracovanej bunky, napocita infikovanych '1' a vyplni stav bunky do 
+   new_cinema */
 
-int getStateOfNeighbors(int cinema[][COLUMNS], int row, int column){
+void getStateOfNeighbors(int cinema[][COLUMNS], int new_cinema[][COLUMNS], int row, int column, bool isLast){
     int infectedCount = 0;
     for (int r = row - 1; r <= row + 1; r++){
         for (int c = column - 1; c <= column + 1; c++){
-            if (r < 0) {
+            if (r < 0) {    //ak je aktualne spracovany riadok zaporny, neriesime
                 continue;
-            } else if (c < 0) {
+            } else if (c < 0) { //ak je aktualne spracovany stlpec zaporny, neriesime
                 continue;
             }
-            if (r == row && c == column) continue;
-            if (cinema[r][c] == INFECTED){
+            if (r == row && c == column) continue;  //ak je to centrum 3x3 gridu, neriesime
+            if (cinema[r][c] == INFECTED){  // ak sa dostal az sem a je infekcny, pocitame
                 infectedCount++;
             }
         }
     }
-    return infectedCount;
+    //toto treba modifikovat
+    if (infectedCount > 1) {   // pocet infekcnych je viac ako 1
+        if (cinema[row][column] != FORBIDDEN_SITTING)   // neni tam zakazane sediet
+            new_cinema[row][column] = 1;    //dame na to miesto infikovaneho
+    } else {
+        if (cinema[row][column] == INFECTED){
+            new_cinema[row][column] = 1;
+        }
+        else if (cinema[row][column] != FORBIDDEN_SITTING)
+            new_cinema[row][column] = 0;
+    }
+
+    // ak je to posledna bunka 
+    if (isLast){
+        memset(cinema, 0, sizeof(cinema[0][0]) * ROWS * COLUMNS);   //vynulujeme kino
+        if (separation) {
+            // ak je zadany -s treba opat upravit kino
+            modifyCinema(cinema);
+        }
+        for (int i = 0; i < ROWS; i++){
+            for (int j = 0; j < COLUMNS; j++){
+                cinema[i][j] = new_cinema[i][j];    //skopirujeme prvky z new_cinema do cinema
+            }
+        }
+        memset(new_cinema, 0, sizeof(new_cinema[0][0]) * ROWS * COLUMNS);   //vynulujeme new_cinema
+        if (separation){
+            modifyCinema(new_cinema);
+        }
+    }
 }
 
 int main(int argc, char **argv){
+    int pseudoTimer = 20;   // deklaracia pseudo casovaca
     int code = 0;
     if (code = processArgs(argc, argv)) return code;
 
     int cinema[ROWS][COLUMNS];
+    int new_cinema[ROWS][COLUMNS];  // toto bude stav v dalsom kroku
     memset(cinema, 0, sizeof(cinema[0][0]) * ROWS * COLUMNS);
+    memset(new_cinema, 0, sizeof(new_cinema[0][0]) * ROWS * COLUMNS);  
     srand((unsigned int)time(NULL));
+
+    // ak je zadany prepinac s
     if (separation) {
-        capacity /= 2;
+        capacity /= 2;  // kapacita sa redukuje na polovicu
         if (capacity < infected){
             fprintf(stderr,"Number of infected is higher than capacity of cinema.\n");
             return 1;
         }
-        modifyCinema(cinema);
+        modifyCinema(cinema);       // vyplni sa striedave sedenie
+        modifyCinema(new_cinema);
     }
-
+    bool isLast = false;    //flag na to aby som rozpoznal kedy sa spracuva posledna bunka generacie
     int count = infected;
+
+    //naplnenie kina random infikovanymi na zaklade prepinaca -i, implicitne je to 10
     while (count != 0){
         int x = rand()%ROWS;
         int y = rand()%COLUMNS;
@@ -110,18 +148,29 @@ int main(int argc, char **argv){
         count--;
     }
 
-    for (int i = 0; i < ROWS; i++){
-        for (int j = 0; j < COLUMNS; j++){
-            int x = getStateOfNeighbors(cinema, i, j);
-            cout << "Riadok " << i << ". Stlpec " << j << ". Nakazeni v okoli: " << x << endl;
+    while (pseudoTimer){
+        // toto je tu na debug, vypis stavu v kine
+        int ic = 0;
+        cout << "GENERACIA " << pseudoTimer << endl;
+        for (int i = 0; i < ROWS; ++i){
+            for (int j = 0; j < COLUMNS; ++j){
+                if (cinema[i][j] == 1) ic++;
+                cout << cinema[i][j] << ' ';
+            }
+            cout << endl;
         }
-    }
-
-    for (int i = 0; i < ROWS; ++i){
-        for (int j = 0; j < COLUMNS; ++j){
-            cout << cinema[i][j] << ' ';
+        cout << "POCET INFIKOVANYCH: " << ic << endl;
+        for (int i = 0; i < ROWS; i++){
+            for (int j = 0; j < COLUMNS; j++){
+                // ak sme na poslednej bunke, flag je true
+                if ((i == ROWS - 1) && (j == COLUMNS - 1)){
+                    isLast = true;
+                }
+                getStateOfNeighbors(cinema, new_cinema, i, j, isLast);
+            }
         }
-        cout << endl;
+        isLast = false;
+        pseudoTimer--;
     }
 
 
