@@ -48,7 +48,7 @@
 	\newpage
 	
 	\section{Úvod}
-	\par Pre vytvorenie epidemiologického modelu, sme si vybrali ochorenie COVID-19. Je to infekčné ochorenie vyvolané koronavírusom SARS-CoV-2, ktorý patrí do rodu Betacoronavirus. Prvý oficiálne potrvdený prípad sa datuje na 8. december 2019, aj keď niektoré nepotvrdené zdroje uvádzajú 17. november 2019. \cite{guardian}
+	\par Pre vytvorenie epidemiologického modelu, sme si vybrali ochorenie COVID-19. Je to infekčné ochorenie vyvolané koronavírusom SARS-CoV-2, ktorý patrí do rodu Betacoronavirus. Prvý oficiálne potrvdený prípad sa datuje na 8. december 2019, aj keď niektoré nepotvrdené zdroje uvádzajú 17. november 2019 \cite{guardian}.
 	\newline
 	
 	\par Ochorenie postihlo celý svet a tak po roku od prvého prípadu sa stále nachádza v pandemickej kríze. COVID-19 zasiahol do života ľudí a v boji proti tejto pandémii musia vlády všetkých krajín zavádzať opatrenia, ktoré pomôžu zabrániť šíreniu. Väčšina týchto opatrení má devastačné následky v oblasti ekonomiky, kultúry, športu, ale aj psychického zdravia ľudí.
@@ -56,19 +56,33 @@
 	
 	\par V súvislosti s touto problematikou sme sa rozhodli zamerať na skúmanie šírenia koronavírusu v oblasti kultúry, konrétne kinematografie. Našim cieľom je zistiť, akým spôsobom sa vírus môže šíriť medzi ľuďmi, ktorí sú uzavretí v realtívne malom priestore (kinosále) a ako znížiť riziko nákazy bez potreby zavádzania drastických opatrení.
 	
-	\subsection{Zdroje faktov}
-	    \subsubsection{Autori}
-	    \begin{itemize}
-	        \item Dominik Boboš (\href{mailto:xbobos00@stud.fit.vutbr.cz}{xbobos00@stud.fit.vutbr.cz})
-	        \item Dávid Oravec (\href{mailto:xorave05@stud.fit.vutbr.cz}{xorave05@stud.fit.vutbr.cz})
-	    \end{itemize}
+    	\subsection{Zdroje faktov}
+    	    \subsubsection{Autori}
+    	    \begin{itemize}
+    	        \item Dominik Boboš (\href{mailto:xbobos00@stud.fit.vutbr.cz}{xbobos00@stud.fit.vutbr.cz})
+    	        \item Dávid Oravec (\href{mailto:xorave05@stud.fit.vutbr.cz}{xorave05@stud.fit.vutbr.cz})
+    	    \end{itemize}
+    	    
+    	    \subsubsection{Literatúra}
+    	    Ako primárne zdroje pre našu štúdiu a zároveň \uv{odrazový mostík} sme použili \cite{maxbrenner2020}, \cite{charlesconnor2020} a \cite{joslelieveldfrankhelleiset.al.2020}. Ostatné literárne zdroje sú uvedené v sekcii \hyperref[sec:bib]{Bibliografia}.
 	    
-	    \subsubsection{Literatúra}
-	    Ako primárny zdroj pre našu štúdiu a zároveň \uv{odrazový mostík} sme použili \cite{maxbrenner2020} spolu s literárnymi zdrojmi na ktoré sa v štúdii odkazuje.
-	    
-	    Ostatné literárne zdroje sú uvedené v sekcii \hyperref[sec:bib]{Bibliografia}
+	\section{Rozbor témy}
+	\par COVID-19 je relatívne nový vírus a preto o ňom vieme stále málo. Jeho špecifickosť spočíva v tom, že sa neprejavuje u každého človeka rovnakým spôsobom. Inkubačná doba vírusu je od 2 do 14 dní, pričom infekciu je možné prenášať aj počas inkubačnej doby (v období bez príznakov ochorenia). Spôsob prenášania vírusu je prostredníctvom kvapôčok, ktoré sú vylučované pri kašli, kýchaní či rozprávaní. V ohrození sú najmä ľudia, ktorí sú v kontakte s nakazeným dlhšie ako 15 minút a ich odstup je menší než 2 metre \cite{wikipedia}. 
 	
+	\par V tejto štúdii sa zameriavame na modelovanie šírenia nákazy v kinosále počas filmového predstavenia. Na základe štúdie \cite{joslelieveldfrankhelleiset.al.2020} sme zostavili potrebné rovnice, ktoré pomôžu monitorovať priebeh nákazy medzi návštevníkmi kina. Pre náš model je využitý celulárny automat.
 	
+	Možno tu ešte niečo dopísať I am Lost
+	
+	    \subsection{Celulárny automat}
+        Na experimenty je využitý celulárny automat (CA), pomocou ktorého sledujeme šírenie nákazy medzi jednotlivými bunkami (návštevníkmi kina). CA je definovaný niekoľkými prvkami \cite{petrperingermartinhruby}.	
+        \begin{itemize}
+            \item \textbf{Bunka} - základný element, môže byť v jednom z konečného počtu stavov
+            \item \textbf{Pole buniek} - n-rozmerné, rovnomerné rozdelenie priestoru
+            \item \textbf{Okolie} - počet a pozícia okolitých buniek s ktorými sa pracuje
+            \item \textbf{Pravidlá} - stav bunky a jej okolia definujúci nový stav bunky
+        \end{itemize}
+        Jednotlivé generácie buniek sú vymodelované a modifikované práve vďaka funkcionalite CA. 
+
 	\newpage
     \bibliographystyle{czechiso}
     \renewcommand{\refname}{Bibliografia}
