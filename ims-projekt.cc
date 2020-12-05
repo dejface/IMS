@@ -4,6 +4,8 @@
 #include <iostream>
 #include <getopt.h>
 #include <algorithm>
+#include <time.h>
+#include <math.h>
 
 using namespace std;
 
@@ -12,11 +14,13 @@ using namespace std;
 #define FORBIDDEN_SITTING -1
 #define HEALTHY 0
 #define INFECTED 1
+#define NEW_INFECTED 2
 
 
 int infected = 10;
 bool masks = false;
 bool separation = false;
+bool ventilation = false;
 int capacity = ROWS * COLUMNS;
 
 
@@ -24,7 +28,7 @@ int processArgs(int argc, char **argv){
     int opt;
     char* endptr = NULL;
     opterr = 0;
-    while ((opt = getopt(argc, argv, "i:ms")) != -1) {
+    while ((opt = getopt(argc, argv, "i:msv")) != -1) {
         switch (opt) {
         case 'i': // infected count, default 10
             infected = (int)strtol(optarg, &endptr, 10);
@@ -38,6 +42,9 @@ int processArgs(int argc, char **argv){
             break;
         case 's': // reduced capacity to half (separation)
             separation = true;
+            break;
+        case 'v':
+            ventilation = true;
             break;
         case ':':
             break;
@@ -63,11 +70,59 @@ void modifyCinema(int cinema[][COLUMNS]){
     }
 }
 
+
+
+/* 
+If there is infected or new_infected neighbours returns either state HEALTHY or NEW_INFECTED
+*/
+int new_state(int actual_state, int infectedcount, int new_infectedcount, int model_time){
+    if (actual_state == INFECTED || actual_state == NEW_INFECTED){
+        return actual_state;
+    }
+    if (infectedcount > 0 || new_infectedcount > 0){
+        // random numbers between 0 and 100
+        float rand_prob = ((float)rand()/(float)(RAND_MAX)) * 100.0;    
+        // Prna - chance of getting infection by single RNA copy
+        float P_rna = 0.0022;      
+        // the number of viral copies inhaled and deposited in the airways (D50 rule is 316)
+        int viral_copies = 0;
+        // Ri - infection risk
+        float Ri = 0.0;
+        if (infectedcount > 0){
+            viral_copies = 20 * model_time * infectedcount; 
+            Ri = (1 - pow((1 - P_rna), viral_copies)) * 100;         
+        } else {
+            viral_copies = 20 * model_time * (new_infectedcount / 4);  
+            Ri = (1 - pow((1 - P_rna), viral_copies)) / 2 * 100;  //3 feet rule https://www.upi.com/Health_News/2020/06/01/At-least-3-feet-of-social-distancing-likely-reduces-COVID-19-spread-study-confirms/7431591040809/     
+        }
+        if (masks){
+            Ri *= 0.025;
+        }
+        if (ventilation){
+            Ri *= 0.15;  // value from study https://www.mdpi.com/1660-4601/17/21/8114/htm
+        }
+        
+        // if (Ri != 0) {  // debug 
+        //     cout << "RI" << Ri << endl;
+        // }
+        if (rand_prob < Ri){
+            return NEW_INFECTED;
+        } else {
+            return HEALTHY;
+        }
+    }
+    return actual_state;
+}
+
+
+
+
 /* zisti stav aktualne spracovanej bunky, napocita infikovanych '1' a vyplni stav bunky do 
    new_cinema */
 
-void getStateOfNeighbors(int cinema[][COLUMNS], int new_cinema[][COLUMNS], int row, int column, bool isLast){
+void getStateOfNeighbors(int cinema[][COLUMNS], int new_cinema[][COLUMNS], int row, int column, bool isLast, int model_time){
     int infectedCount = 0;
+    int new_infectedcount = 0;
     for (int r = row - 1; r <= row + 1; r++){
         for (int c = column - 1; c <= column + 1; c++){
             if (r < 0) {    //ak je aktualne spracovany riadok zaporny, neriesime
@@ -79,18 +134,26 @@ void getStateOfNeighbors(int cinema[][COLUMNS], int new_cinema[][COLUMNS], int r
             if (cinema[r][c] == INFECTED){  // ak sa dostal az sem a je infekcny, pocitame
                 infectedCount++;
             }
+            if (cinema[r][c] == NEW_INFECTED){  // ak sa dostal az sem a bol novy nakazeny, pocitame
+                new_infectedcount++;
+            }
         }
     }
     //toto treba modifikovat
-    if (infectedCount > 1) {   // pocet infekcnych je viac ako 1
+    if (infectedCount > 0 || new_infectedcount > 0) {   // pocet infekcnych je viac ako 1
         if (cinema[row][column] != FORBIDDEN_SITTING)   // neni tam zakazane sediet
-            new_cinema[row][column] = 1;    //dame na to miesto infikovaneho
+            // cout << infectedCount << new_infectedcount ;
+            new_cinema[row][column] = new_state(cinema[row][column], infectedCount, new_infectedcount, model_time);    //dame na to miesto infikovaneho
     } else {
         if (cinema[row][column] == INFECTED){
-            new_cinema[row][column] = 1;
+            new_cinema[row][column] = INFECTED;
         }
-        else if (cinema[row][column] != FORBIDDEN_SITTING)
-            new_cinema[row][column] = 0;
+        else if (cinema[row][column] == HEALTHY){
+            new_cinema[row][column] = HEALTHY;
+        }
+        else if (cinema[row][column] == NEW_INFECTED){
+            new_cinema[row][column] = NEW_INFECTED;
+        }
     }
 
     // ak je to posledna bunka 
@@ -112,9 +175,12 @@ void getStateOfNeighbors(int cinema[][COLUMNS], int new_cinema[][COLUMNS], int r
     }
 }
 
+
+
 int main(int argc, char **argv){
     int pseudoTimer = 20;   // deklaracia pseudo casovaca
     int code = 0;
+    srand((unsigned int)time(NULL));
     if (code = processArgs(argc, argv)) return code;
 
     int cinema[ROWS][COLUMNS];
@@ -148,29 +214,36 @@ int main(int argc, char **argv){
         count--;
     }
 
+
     while (pseudoTimer){
         // toto je tu na debug, vypis stavu v kine
         int ic = 0;
-        cout << "GENERACIA " << pseudoTimer << endl;
+        int nic = 0;
+        static int gen_index = 1;
+        cout << "GENERACIA " << gen_index << endl;
         for (int i = 0; i < ROWS; ++i){
             for (int j = 0; j < COLUMNS; ++j){
                 if (cinema[i][j] == 1) ic++;
+                if (cinema[i][j] == 2) nic++;
                 cout << cinema[i][j] << ' ';
             }
             cout << endl;
         }
         cout << "POCET INFIKOVANYCH: " << ic << endl;
+        cout << "POCET NOVO INFIKOVANYCH: " << nic << endl;
         for (int i = 0; i < ROWS; i++){
             for (int j = 0; j < COLUMNS; j++){
                 // ak sme na poslednej bunke, flag je true
                 if ((i == ROWS - 1) && (j == COLUMNS - 1)){
                     isLast = true;
                 }
-                getStateOfNeighbors(cinema, new_cinema, i, j, isLast);
+                getStateOfNeighbors(cinema, new_cinema, i, j, isLast, gen_index);
             }
         }
+        
         isLast = false;
         pseudoTimer--;
+        gen_index++;
     }
 
 
