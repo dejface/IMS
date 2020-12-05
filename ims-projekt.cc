@@ -1,3 +1,15 @@
+/********************************************************
+ * Subject: Modelling and Simulation                    *
+ * Topic: no. 3 - Epidemiologic models - micro level    *
+ * Module: ims-projekt.cc                               *
+ * Description: This simulation tracks how COVID-19     *
+ *              can spread in closed area - cinema      *
+ *                                                      *
+ * Authors: Dominik Boboš (xbobos00@stud.fit.vutbr.cz)  *
+ *          Dávid Oravec (xorave05@stud.fit.vutbr.cz)   *
+ *                                                      *
+ ********************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,12 +38,16 @@ bool extreme_separation = false;
 bool effective_mask = false;
 int capacity = ROWS * COLUMNS;
 
+/**
+ * Function for argument parsing and processing.
+ * @return - 0 if success, 1 otherwise
+ */
 
 int processArgs(int argc, char **argv){
     int opt;
     char* endptr = NULL;
     opterr = 0;
-    while ((opt = getopt(argc, argv, "i:mesxv:")) != -1) {
+    while ((opt = getopt(argc, argv, "i:mesxv:h")) != -1) {
         switch (opt) {
         case 'i': // infected count, default 10
             infected = (int)strtol(optarg, &endptr, 10);
@@ -63,6 +79,17 @@ int processArgs(int argc, char **argv){
                 return 1;
             }
             break;
+        case 'h':
+            fprintf(stdout, "SIMULATION: COVID-19 SPREAD IN CINEMA\n\n"\
+                            "Usage: ./ims-projekt [-s] [-i num] [-v level]"\
+                            " [-e] [-m] [-x]\n"\
+                            "   -s - capacity is reduced by half,always one empty seat between two people\n"\
+                            "   -x - capacity is reduced to quarter, three empty seats between two people\n"\
+                            "   -i - count of infected in cinema at the beggining of simulation (implicitly 10)\n"\
+                            "   -m - all people in cinema are wearing regular masks\n"\
+                            "   -e - all people are wearing N95 respirators\n"\
+                            "   -v - ventilation level in range 1 - 4 (implicitly 1)\n");
+            return 1;
         case ':':
             break;
 
@@ -74,6 +101,10 @@ int processArgs(int argc, char **argv){
     }
     return 0;
 }
+
+/**
+ * If separation (-s) is set, cinema sitting is modified.
+ */
 
 void modifyCinema(int cinema[][COLUMNS]){
     for (int i = 0; i < ROWS; i++){
@@ -87,6 +118,9 @@ void modifyCinema(int cinema[][COLUMNS]){
     }
 }
 
+/**
+ * If separation (-x) is set, cinema sitting is modified.
+ */
 
 void modifyCinemaExtreme(int cinema[][COLUMNS]){
     for (int i = 0; i < ROWS; i++){
@@ -100,11 +134,11 @@ void modifyCinemaExtreme(int cinema[][COLUMNS]){
     }
 }
 
+/** 
+ * If there is infected or new_infected neighbours returns either state HEALTHY or NEW_INFECTED
+ * @return - new state of cell (person in cinema)
+ */
 
-
-/* 
-If there is infected or new_infected neighbours returns either state HEALTHY or NEW_INFECTED
-*/
 int newState(int actual_state, int infectedcount, int new_infectedcount, int model_time, int dist_from_infected){
     if (actual_state == INFECTED || actual_state == NEW_INFECTED){
         return actual_state;
@@ -168,13 +202,13 @@ int infectedDistance(int cinema[][COLUMNS], int row, int column){
     int index = 4;
     for (int r = row - 4; r <= row + 4; r++){
         for (int c = column - 4; c <= column + 4; c++){
-            if (r < 0 || r >= ROWS) {    //ak je aktualne spracovany riadok zaporny, neriesime
+            if (r < 0 || r >= ROWS) {   
                 continue;
-            } else if (c < 0 || c  >= COLUMNS) { //ak je aktualne spracovany stlpec zaporny, neriesime
+            } else if (c < 0 || c  >= COLUMNS) { 
                 continue;
             }
-            if (r == row && c == column) continue;  //ak je to centrum gridu, neriesime
-            if (cinema[r][c] == INFECTED){  // ak sa dostal az sem a je infekcny, pocitame
+            if (r == row && c == column) continue; 
+            if (cinema[r][c] == INFECTED){
                 distance = index;
             }
         }
@@ -183,34 +217,34 @@ int infectedDistance(int cinema[][COLUMNS], int row, int column){
     return abs(distance);
 }
 
+/**
+ * Counts number of infected neighbors, set new_state of current cell and stores it into
+ * new_cinema
+ */ 
 
-/* zisti stav aktualne spracovanej bunky, napocita infikovanych '1' a vyplni stav bunky do 
-   new_cinema */
 void getStateOfNeighbors(int cinema[][COLUMNS], int new_cinema[][COLUMNS], int row, int column, bool isLast, int model_time){
     int infectedCount = 0;
     int new_infectedcount = 0;
     for (int r = row - 1; r <= row + 1; r++){
         for (int c = column - 1; c <= column + 1; c++){
-            if (r < 0 || r >= ROWS) {    //ak je aktualne spracovany riadok zaporny, neriesime
+            if (r < 0 || r >= ROWS) {    
                 continue;
-            } else if (c < 0 || c  >= COLUMNS) { //ak je aktualne spracovany stlpec zaporny, neriesime
+            } else if (c < 0 || c  >= COLUMNS) {
                 continue;
             }
-            if (r == row && c == column) continue;  //ak je to centrum 3x3 gridu, neriesime
-            if (cinema[r][c] == INFECTED){  // ak sa dostal az sem a je infekcny, pocitame
+            if (r == row && c == column) continue;  
+            if (cinema[r][c] == INFECTED){ 
                 infectedCount++;
             }
-            if (cinema[r][c] == NEW_INFECTED || cinema[r][c] == FORBIDDEN_SITTING_INFECTED){  // ak sa dostal az sem a bol novy nakazeny, pocitame
+            if (cinema[r][c] == NEW_INFECTED || cinema[r][c] == FORBIDDEN_SITTING_INFECTED){
                 new_infectedcount++;
             }
         }
     }
 
     int dist_from_infected = infectedDistance(cinema, row, column);
-    //toto treba modifikovat
-    if (infectedCount > 0 || new_infectedcount > 0) {   // pocet infekcnych je viac ako 1
-        // if (cinema[row][column] != FORBIDDEN_SITTING)   // neni tam zakazane sediet
-            new_cinema[row][column] = newState(cinema[row][column], infectedCount, new_infectedcount, model_time, dist_from_infected);    //dame na to miesto infikovaneho
+    if (infectedCount > 0 || new_infectedcount > 0) { 
+        new_cinema[row][column] = newState(cinema[row][column], infectedCount, new_infectedcount, model_time, dist_from_infected);
     } else {
         if (cinema[row][column] == INFECTED){
             new_cinema[row][column] = INFECTED;
@@ -223,23 +257,23 @@ void getStateOfNeighbors(int cinema[][COLUMNS], int new_cinema[][COLUMNS], int r
         }
     }
 
-    // ak je to posledna bunka 
+    // if it is a last cell 
     if (isLast){
-        memset(cinema, 0, sizeof(cinema[0][0]) * ROWS * COLUMNS);   //vynulujeme kino
+        memset(cinema, 0, sizeof(cinema[0][0]) * ROWS * COLUMNS);
         if (separation) {
-            // ak je zadany -s treba opat upravit kino
+            // -s modification of cinema
             modifyCinema(cinema);
         }
         if (extreme_separation) {
-            // ak je zadany -x treba opat upravit kino
+            // -x modification of cinema
             modifyCinemaExtreme(cinema);
         }
         for (int i = 0; i < ROWS; i++){
             for (int j = 0; j < COLUMNS; j++){
-                cinema[i][j] = new_cinema[i][j];    //skopirujeme prvky z new_cinema do cinema
+                cinema[i][j] = new_cinema[i][j];  // put cells from new_cinema to cinema
             }
         }
-        memset(new_cinema, 0, sizeof(new_cinema[0][0]) * ROWS * COLUMNS);   //vynulujeme new_cinema
+        memset(new_cinema, 0, sizeof(new_cinema[0][0]) * ROWS * COLUMNS);
         if (separation){
             modifyCinema(new_cinema);
         }
@@ -252,41 +286,41 @@ void getStateOfNeighbors(int cinema[][COLUMNS], int new_cinema[][COLUMNS], int r
 
 
 int main(int argc, char **argv){
-    int pseudoTimer = 20;   // deklaracia pseudo casovaca
+    int pseudoTimer = 20;   // pseudo timer
     int code = 0;
     srand((unsigned int)time(NULL));
     if (code = processArgs(argc, argv)) return code;
 
     int cinema[ROWS][COLUMNS];
-    int new_cinema[ROWS][COLUMNS];  // toto bude stav v dalsom kroku
+    int new_cinema[ROWS][COLUMNS]; 
     memset(cinema, 0, sizeof(cinema[0][0]) * ROWS * COLUMNS);
     memset(new_cinema, 0, sizeof(new_cinema[0][0]) * ROWS * COLUMNS);  
     srand((unsigned int)time(NULL));
 
-    // ak je zadany prepinac s
+    // -s
     if (separation) {
-        capacity /= 2;  // kapacita sa redukuje na polovicu
+        capacity /= 2;  
         if (capacity < infected){
             fprintf(stderr,"Number of infected is higher than capacity of cinema.\n");
             return 1;
         }
-        modifyCinema(cinema);       // vyplni sa striedave sedenie
+        modifyCinema(cinema);     
         modifyCinema(new_cinema);
     }
-    // ak je zadany prepinac s
+    // -x
     if (extreme_separation) {
-        capacity /= 4;  // kapacita sa redukuje na polovicu
+        capacity /= 4;  
         if (capacity < infected){
             fprintf(stderr,"Number of infected is higher than capacity of cinema.\n");
             return 1;
         }
-        modifyCinemaExtreme(cinema);       // vyplni sa striedave sedenie
+        modifyCinemaExtreme(cinema);      
         modifyCinemaExtreme(new_cinema);
     }
-    bool isLast = false;    //flag na to aby som rozpoznal kedy sa spracuva posledna bunka generacie
+    bool isLast = false;    // flag for recoginizing the last cell in cinema
     int count = infected;
 
-    //naplnenie kina random infikovanymi na zaklade prepinaca -i, implicitne je to 10
+    // randomly insert infected people to cinema
     while (count != 0){
         int x = rand()%ROWS;
         int y = rand()%COLUMNS;
@@ -300,11 +334,10 @@ int main(int argc, char **argv){
 
 
     while (pseudoTimer){
-        // toto je tu na debug, vypis stavu v kine
         int ic = 0;
         int nic = 0;
         static int gen_index = 1;
-        cout << "GENERACIA " << gen_index << endl;
+        cout << "GENERATION " << gen_index << endl;
         for (int i = 0; i < ROWS; ++i){
             for (int j = 0; j < COLUMNS; ++j){
                 if (cinema[i][j] == 1) ic++;
@@ -313,8 +346,8 @@ int main(int argc, char **argv){
             }
             cout << endl;
         }
-        cout << "POCET INFIKOVANYCH: " << ic << endl;
-        cout << "POCET NOVO INFIKOVANYCH: " << nic << endl;
+        cout << "NUMBER OF INFECTED AT THE BEGGINING: " << ic << endl;
+        cout << "NUMBER OF NEWLY INFECTED: " << nic << endl;
         for (int i = 0; i < ROWS; i++){
             for (int j = 0; j < COLUMNS; j++){
                 // ak sme na poslednej bunke, flag je true
@@ -329,7 +362,6 @@ int main(int argc, char **argv){
         pseudoTimer--;
         gen_index++;
     }
-
 
     return 0;
 }

@@ -82,7 +82,35 @@
             \item \textbf{Pravidlá} - stav bunky a jej okolia definujúci nový stav bunky
         \end{itemize}
         Jednotlivé generácie buniek sú vymodelované a modifikované práve vďaka funkcionalite CA. 
-
+    
+    \section{Koncepcia modelu}
+    V našom modeli skúmame šírenie vírusu za rôznych podmienok. Podmienky (opatrenia) záležia na uživateľskom vstupe. Náš model podporuje opatrenia v kinosálach: 
+        \begin{itemize}
+            \item návštevníci majú povinne nasadené rúška
+            \item v kinosále je striedavé sedenie (1 voľná sedačka medzi návštevníkmi sediacimi v jednej rade)
+            \item v kine je zapnutá ventilácia vzduchu
+        \end{itemize}
+    Na základe týchto opatrení skúmame šírenie vírusu medzi návštevníkmi počas filmu. Predpokladáme vždy, že je sála vypredaná a teda všetky miesta, na ktorých je práve umožnené sedieť, sú obsadené.
+    
+        \subsubsection{Stavy bunky}
+        Bunky môžu byť v jednom z následujúcich stavov \{-1,0,1,2\}.
+        \begin{itemize}
+            \item \textbf{-1} je stav, ktorý reprezentuje zakázané sedenie (pri opatrení na obmedzenie kapacity kinosály)
+            \item \textbf{0} je stav, ktorým disponuje zdravý návštevník kina
+            \item \textbf{1} je stav, ktorým disponuje nakazený návštevník kina
+            \item \textbf{2} je stav, kedy je na zdravého návštevníka prenesený vírus počas pobytu v kinosále
+            \begin{itemize}
+                \item v tomto prípade však nakazený návštevník nie je hneď infekčný a neroznáša vírus
+            \end{itemize}
+        \end{itemize}
+        
+        \subsubsection{Pole buniek}
+        Pole buniek reprezentuje kinosálu. Kapacita kinosály je 200 osôb, pri čom sedadlá sú rozdelené do 10 radov po 20 miest. Výnimkou, kedy má sála obmedzenú kapacitu, je pri zavedení opatrenia na striedavé sedenie. Vtedy je kapacita sály 100 miest. Tak ako už bolo spomenuté, predpokladáme zaplnenie sály vždy na 100\%.
+        
+        \subsubsection{Okolie}
+        Model ráta s okolím bunky typu \texttt{Moore}, čiže 3x3. To znamená, že vírus sa môže šíriť od všetkých susediacich buniek \cite{petrperingermartinhruby}.
+    
+    
 	\newpage
     \bibliographystyle{czechiso}
     \renewcommand{\refname}{Bibliografia}
