@@ -102,6 +102,10 @@ int new_state(int actual_state, int infectedcount, int new_infectedcount, int mo
             Ri *= 0.15;  // value from study https://www.mdpi.com/1660-4601/17/21/8114/htm
         }
         
+
+
+        // THIS CALCULATOR MAKES ME CRY BECAUSE MY EQUATIONS ARE BULLSHIT ACCORDING TO THIS : https://www.mpic.de/4747361/risk-calculator?en
+
         // if (Ri != 0) {  // debug 
         //     cout << "RI" << Ri << endl;
         // }
