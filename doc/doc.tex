@@ -16,70 +16,68 @@
 
 \begin{document}
 
-	\begin{titlepage}
-		\begin{center}
-			\Huge
-			\textsc{Vysoké učení technické v~Brně} \\
-			\huge
-			\textsc{Fakulta informačních technologií} \\
-			\vspace{\stretch{0.382}}
-			\begin{figure}[h]
+    \begin{titlepage}
+        \begin{center}
+            \Huge
+            \textsc{Vysoké učení technické v~Brně} \\
+            \huge
+            \textsc{Fakulta informačních technologií} \\
+            \vspace{\stretch{0.382}}
+            \begin{figure}[h]
                 \centering
                 \scalebox{0.6}{\includegraphics{logo.eps}}
             \end{figure}
-			\LARGE
-			Projektová dokumentácia k~predmetu IMS \\
-			\Huge
-			Zadanie č. 3 - Epidemiologické modely - mikro-úroveň
-			\vspace{\stretch{0.618}}
-		\end{center}
+            \LARGE
+            Projektová dokumentácia k~predmetu IMS \\
+            \Huge
+            Zadanie č. 3 - Epidemiologické modely - mikro-úroveň
+            \vspace{\stretch{0.618}}
+        \end{center}
 
-		{\Large
-			\today
-			\hfill
-			\begin{tabular}{r}
-			Dávid Oravec (xorave05) \\
-			Dominik Boboš (xbobos00)
-			\end{tabular}
-		}
-	\end{titlepage}
-	\newpage
-	
-	\tableofcontents
-	\newpage
-	
-	\section{Úvod}
-	\par Pre vytvorenie epidemiologického modelu, sme si vybrali ochorenie COVID-19. Je to infekčné ochorenie vyvolané koronavírusom SARS-CoV-2, ktorý patrí do rodu Betacoronavirus. Prvý oficiálne potrvdený prípad sa datuje na 8. december 2019, aj keď niektoré nepotvrdené zdroje uvádzajú 17. november 2019 \cite{guardian}.
-	\newline
-	
-	\par Ochorenie postihlo celý svet a tak po roku od prvého prípadu sa stále nachádza v pandemickej kríze. COVID-19 zasiahol do života ľudí a v boji proti tejto pandémii musia vlády všetkých krajín zavádzať opatrenia, ktoré pomôžu zabrániť šíreniu. Väčšina týchto opatrení má devastačné následky v oblasti ekonomiky, kultúry, športu, ale aj psychického zdravia ľudí.
-	\newline
-	
-	\par V súvislosti s touto problematikou sme sa rozhodli zamerať na skúmanie šírenia koronavírusu v oblasti kultúry, konrétne kinematografie. Našim cieľom je zistiť, akým spôsobom sa vírus môže šíriť medzi ľuďmi, ktorí sú uzavretí v relatívne malom priestore (kinosále) a ako znížiť riziko nákazy bez potreby zavádzania drastických opatrení.
-	
-    	\subsection{Zdroje faktov}
-    	    \subsubsection{Autori}
-    	    \begin{itemize}
-    	        \item Dominik Boboš (\href{mailto:xbobos00@stud.fit.vutbr.cz}{xbobos00@stud.fit.vutbr.cz})
-    	        \item Dávid Oravec (\href{mailto:xorave05@stud.fit.vutbr.cz}{xorave05@stud.fit.vutbr.cz})
-    	    \end{itemize}
-    	    
-    	    \subsubsection{Literatúra}
-    	    Ako primárne zdroje pre našu štúdiu a zároveň \uv{odrazový mostík} sme použili \cite{maxbrenner2020}, \cite{charlesconnor2020} a \cite{joslelieveldfrankhelleiset.al.2020}. Ostatné literárne zdroje sú uvedené v sekcii \hyperref[sec:bib]{Bibliografia}.
-	    
-	\section{Rozbor témy}
-	\par COVID-19 je relatívne nový vírus a preto o ňom vieme stále málo. Jeho špecifickosť spočíva v tom, že sa neprejavuje u každého človeka rovnakým spôsobom. Inkubačná doba vírusu je od 2 do 14 dní, pričom infekciu je možné prenášať aj počas inkubačnej doby (v období bez príznakov ochorenia). Častý prípad je aj asymptomatický priebeh ochorenia, nastáva až v 1/5 všetkých prípadov \cite{asymptomatic}, pričom aj títo pacienti sú stále rovnako infekční \cite{asymptomaticinfectious}. Spôsob prenášania vírusu je prostredníctvom kvapôčok, ktoré sú vylučované pri kašli, kýchaní či rozprávaní, alebo spievaní a následne sa čiastočky s vírusom dostanú do tela človeka, prostredníctvom slizníc. V ohrození sú najmä ľudia, ktorí sú v kontakte s nakazeným dlhšie ako 15 minút a ich odstup je menší než 2 metre \cite{wikipedia}. 
-	
-	\par V tejto štúdii sa zameriavame na modelovanie šírenia nákazy v kinosále počas filmového predstavenia. Nakoľko v kine strávime pomerne krátku dobu a pohyb je statický, nie je vhodné použiť na simulovanie ochorenia klasický model \textbf{SIR} \cite{basicmodels}, nakoľko nedochádza k uzdraveniu nakazených, ale je potrebné sa zamerať najmä na šírenie kvapôčok a potenciálnu nákazu zdravého človeka. Na základe štúdie \cite{joslelieveldfrankhelleiset.al.2020} sme zostavili potrebné rovnice, ktoré pomôžu monitorovať priebeh nákazy medzi návštevníkmi kina s určitými opatreniami. Pre náš model je využitý celulárny automat.
-	
-	%Možno tu ešte niečo dopísať I am Lost ja tu este dopisem sracky z tej studie a vysvetlim jednotlive vyznamy opatreni, ale teraz no energy to do such a thing.
-	
-	%niekde napcham aj overovanie validity pomcou tej kalkulacky a aj podla niektorzch tych mapiek
-	%vlastne mam cely zoznam veci ktore tu chcem napisat, mam to na papieri co vsetko :D
-	%len neviem do akych kapitol mam rozobrat tu studiu, ze ci tu v rozbore alebo inde
-	
-	    \subsection{Celulárny automat}
-        Na experimenty je využitý celulárny automat (CA), pomocou ktorého sledujeme šírenie nákazy medzi jednotlivými bunkami (návštevníkmi kina). CA je definovaný niekoľkými prvkami [IMS/209].	
+        {\Large
+            \today
+            \hfill
+            \begin{tabular}{r}
+            Dávid Oravec (xorave05) \\
+            Dominik Boboš (xbobos00)
+            \end{tabular}
+        }
+    \end{titlepage}
+    \newpage
+    
+    \tableofcontents
+    \newpage
+    
+    \section{Úvod}
+    \par Pre vytvorenie epidemiologického modelu, sme si vybrali ochorenie COVID-19. Je to infekčné ochorenie vyvolané koronavírusom SARS-CoV-2, ktorý patrí do rodu Betacoronavirus. Prvý oficiálne potrvdený prípad sa datuje na 8. december 2019, aj keď niektoré nepotvrdené zdroje uvádzajú 17. november 2019 \cite{guardian}.
+    \newline
+    
+    \par Ochorenie postihlo celý svet a tak po roku od prvého prípadu sa stále nachádza v pandemickej kríze. COVID-19 zasiahol do života ľudí a v boji proti tejto pandémii musia vlády všetkých krajín zavádzať opatrenia, ktoré pomôžu zabrániť šíreniu. Väčšina týchto opatrení má devastačné následky v oblasti ekonomiky, kultúry, športu, ale aj psychického zdravia ľudí.
+    \newline
+    
+    \par V súvislosti s touto problematikou sme sa rozhodli zamerať na skúmanie šírenia koronavírusu v oblasti kultúry, konrétne kinematografie. Našim cieľom je zistiť, akým spôsobom sa vírus môže šíriť medzi ľuďmi, ktorí sú uzavretí v relatívne malom priestore (kinosále) a ako znížiť riziko nákazy bez potreby zavádzania drastických opatrení (zatvorenie kina).
+    
+        \subsection{Zdroje faktov}
+            \subsubsection{Autori}
+            \begin{itemize}
+                \item Dominik Boboš (\href{mailto:xbobos00@stud.fit.vutbr.cz}{xbobos00@stud.fit.vutbr.cz})
+                \item Dávid Oravec (\href{mailto:xorave05@stud.fit.vutbr.cz}{xorave05@stud.fit.vutbr.cz})
+            \end{itemize}
+            
+            \subsubsection{Literatúra}
+            Ako primárne zdroje pre našu štúdiu sme použili \cite{maxbrenner2020}, \cite{charlesconnor2020} a \cite{joslelieveldfrankhelleiset.al.2020}. Ostatné literárne zdroje sú uvedené v sekcii \hyperref[sec:bib]{Bibliografia}.
+        
+        \subsection{Overenie validity}
+        Presná štúdia, ktorá spracováva problematiku šírenia ochorenia Covid19 v kinosálach, nebola nájdená. Ako overenie správnosti simulácie, je použitá štúdia, ktorá analyzuje šírenie infekcie v školských triedach, kanceláriach, spevokoloch a na recepciách \cite{joslelieveldfrankhelleiset.al.2020}. Najpodobnejšia situácia ku kinosálam je so školskými triedami, kedy ľudia takisto sedia pri sebe a sú zväčša ticho (učiteľ v štúdií nebol braný do úvahy). Rozdiel je v počte ľudí a rozmeroch miestnosti. Väčší počet ľudí hrá v náš neprospech, avšak výška miestnosti zas naopak. Práve vďaka týmto menším odchýľkam, sme výsledky nášho modelu porovnávali s tým v štúdií. K dodatočnému overeniu validity sme používali kalkulačku\footnote{\href{https://www.mpic.de/4747361/risk-calculator}{https://www.mpic.de/4747361/risk-calculator}}, ktorá počíta riziko nakazenia sa ochorením v situácií so špecifikovanými parametrami ako počet ľudí, vykonávaná činnosť, rozmery miestnosti, čas, použité masky.
+        
+    \section{Rozbor témy}
+    \par COVID-19 je relatívne nový vírus a preto o ňom vieme stále málo. Jeho špecifickosť spočíva v tom, že sa neprejavuje u každého človeka rovnakým spôsobom. Inkubačná doba vírusu je od 2 do 14 dní, pričom infekciu je možné prenášať aj počas inkubačnej doby (v období bez príznakov ochorenia). Častý prípad je aj asymptomatický priebeh ochorenia, nastáva až v 1/5 všetkých prípadov \cite{asymptomatic}, pričom aj títo pacienti sú stále rovnako infekční \cite{asymptomaticinfectious}. Spôsob prenášania vírusu je prostredníctvom kvapôčok, ktoré sú vylučované pri kašli, kýchaní či rozprávaní, alebo spievaní a následne sa čiastočky s vírusom dostanú do tela človeka, prostredníctvom slizníc. V ohrození sú najmä ľudia, ktorí sú v kontakte s nakazeným dlhšie ako 15 minút a ich odstup je menší než 2 metre \cite{wikipedia}. 
+    
+    \par V tejto štúdii sa zameriavame na modelovanie šírenia nákazy v kinosále počas filmového predstavenia. Nakoľko v kine strávime pomerne krátku dobu a pohyb je statický, nie je vhodné použiť na simulovanie ochorenia klasický model \textbf{SIR} \cite{basicmodels}, nakoľko nedochádza k uzdraveniu nakazených, ale je potrebné sa zamerať najmä na šírenie kvapôčok a potenciálnu nákazu zdravého človeka. Na základe štúdie \cite{joslelieveldfrankhelleiset.al.2020} sme zostavili potrebné rovnice, ktoré pomôžu monitorovať priebeh nákazy medzi návštevníkmi kina s určitými opatreniami. Pre náš model je využitý celulárny automat.
+    
+
+        \subsection{Celulárny automat}
+        Na experimenty je využitý celulárny automat (CA), pomocou ktorého sledujeme šírenie nákazy medzi jednotlivými bunkami (návštevníkmi kina). CA je definovaný niekoľkými prvkami [IMS/209].   
         \begin{itemize}
             \item \textbf{Bunka} - základný element, môže byť v jednom z konečného počtu stavov
             \item \textbf{Pole buniek} - n-rozmerné, rovnomerné rozdelenie priestoru
@@ -95,9 +93,9 @@
             \item v kinosále je striedavé sedenie (1 voľná sedačka medzi návštevníkmi sediacimi v jednej rade, prípadne 3 voľné sedačky pri ešte prísnejšom pravidle)
             \item v kine je zapnutá ventilácia vzduchu (v rôznych stupňoch účinnosti)
         \end{itemize}
-    Na základe týchto opatrení skúmame šírenie vírusu medzi návštevníkmi počas filmu. Predpokladáme vždy, že je sála vypredaná a teda všetky miesta, na ktorých je práve umožnené sedieť, sú obsadené. Sála je pred každým predstavením riadne vydezinkfikovaná, aby sa zabránilo čiastočkám vírusu na povrchoch.
+    Na základe týchto opatrení skúmame šírenie vírusu medzi návštevníkmi počas filmu. Predpokladáme vždy, že je sála vypredaná a teda všetky miesta, na ktorých je práve umožnené sedieť, sú obsadené. Sála je pred každým predstavením riadne vydezinkfikovaná, aby sa zabránilo čiastočkám vírusu na povrchoch materiálov, nakoľko sú schopné prežiť na väčšine povrchov, ktoré sa v kinosále vyskytujú, 4 až 5 dní \cite{covidonsurface}.
     
-        \subsubsection{Stavy bunky}
+        \subsection{Stavy bunky}
         Bunky môžu byť v jednom z následujúcich stavov \{-2,-1,0,1,2\}.
         \begin{itemize}
             \item \textbf{-2} je stav, ktorý značí prázdne miesto pri obmedzenej kapacite, ktoré vo svojom okolí obsahuje dostatok virovej nálože k vyvolaniu ochorenia.
@@ -110,40 +108,71 @@
                 \item zároveň signalizuje pre svoje okolie, že v jeho blízkosti sa nachádza virová nálož dostatočná na spôsobenie infekcie Covid19 
             \end{itemize}
         \end{itemize}
+        \par Počiatočné stavy sú \{-1,0,1\}, čo znamená, že v simulácií dochádza k nakazeniu zdravých ľudí ($0 \Rightarrow 2$) alebo voľné sedadlo môže z nekontaminovaného prejsť do stavu kedy v jeho okolí je početná virová nálož ($-1 \Rightarrow -2$). 
         
-        \subsubsection{Pole buniek}
+        \subsection{Pole buniek}
         Pole buniek reprezentuje kinosálu. Kapacita kinosály je 200 osôb, pri čom sedadlá sú rozdelené do 10 radov po 20 miest. Výnimkou, kedy má sála obmedzenú kapacitu, je pri zavedení opatrenia na striedavé sedenie. Vtedy je kapacita sály 100 miest. Prípadne pri ešte prísnejšom opatrení je voľné až každé štvrté miesto a teda kapacita 50 miest. Tak ako už bolo spomenuté, predpokladáme zaplnenie sály vždy na 100\%.
         
-        \subsubsection{Okolie}
+        \subsection{Okolie}
         Model ráta s okolím bunky typu \texttt{Moore}, čiže 3x3. To znamená, že vírus sa môže šíriť od všetkých susediacich buniek [IMS/210].
     
-        % tu by som doplnil este mozno pravidla automatu, ze ako sa menia stavy
+        \subsection{Simulačné rovnice}
+        V simulácií uvažujeme so vždy vydezinfikovanou sálou, čo znamená, že sledujeme riziko nákazy pochádzajúce, len od práve prítomného infikovaného človeka a neprichádza k nakazeniu prostredníctvom pozostatkov vírusu na povrchoch. Simulujeme mikro systém, je preto potrebné sa zamerať na iné premenné ovplyvňujúce nákazu ako v ponímaní makro systému. Dôležité je pre nás prúdenie vzduchu, čas a potrebná vírusová dávka, ktorá môže spôsobiť nakazenie sa.   
+        \par Rovnica použitá v simulácií závisí od faktoru \textbf{D50}, ktorá značí počet vírusových kópií, ktoré človek príjme, aby sa prejavila nákaza u 50\% obyvateľstva. Jej hodnota sa pre Covid19 nastavila na hodnote \textit{316} \cite{joslelieveldfrankhelleiset.al.2020}.
+        
+        \subsubsection{Odvodené rovnice s faktorom D50}
+        Pravdepodobnosť nakazenia sa z jednej vírusovej zložky je teda:
+        $$
+            P_{rna} (\%) = (1 - 10^{\frac{log_{10}(0.5)}{D50}}) \times 100 = 0.22%
+        $$
+        
+        Pre simuláciu je teda možné zostaviť rovnicu:
+        $$
+            N_{copies} =  20 * t * n_{infected} 
+        $$
+        $$
+            R_{i} (\%) = (1 - (1 - P_{rna}^{N_{copies}})) \times 100
+        $$
+        
+        Kde $N_{copies}$ je virová nálož v modelovom čase $t$ (1 časová jednotka modelu = 6 minút v skutočnosti), $n_{infected}$ je počet nakazených v okolí (počet buniek so stavom 1). $R_{i}$ je riziko nakazenia sa v percentách.
+        
+        Pre šírenie nákazy od pozitívneho je potrebné simulovať prúdenie vzduchu, k tomu slúžia bunky so stavom 2. Tie signalizujú, že v jeho okolí už je dostatok vírusových kópií, ktoré sa postupne šíria ďalej v priestore. Ak sa v okolí zdravej bunky nachádzajú tie so stavom 2, je pre nich počítané riziko nakazenia sa s pozmenenou rovnicou podľa \uv{3-feet rule} \cite{3feetrule}.
+        $$
+            N_{copies} =  20 * t * (n_{new\,infected} / 2) 
+        $$
+        $$
+            R_{i} (\%) = (1 - (1 - P_{rna}^{N_{copies}})) / 2 \times 100
+        $$
+        
+        Kde $n_{new\,infected}$ je počet novo infikovaných, teda bunky so stavom 2.
+        
+        \subsubsection{Vplyv opatrení} Vypočítané riziko nákazy, je riziko pre prípad, kedy nie sú aplikované nijaké opatrenia. S každým použitým opatrením sa toto riziko percentuálne znižuje vzhľadom na účinnosť opatrenia. Ich presný percentuálny dopad je opísaný nižšie.
         
     \section{Podstata simulačných experimentov a ich priebeh}
         \par Cieľom našich experimentov je zistiť, koľko percent návševníkov sa infikuje počas 2 hodinového sledovania filmu v kine. Následne skúmame akými spôsobmi (opatreniami) toto percento znížiť, aby ľudia naďalej mohli kiná navštevovať.
         
         \subsection{Postup pri experimentovaní}
-        Najprv sme zvolili počet infikovaných, ktorí su na začiatku umiestnení do kinosáli (prepínač -i). Vo všetkých prípadoch sme výber počiatočného počtu infikovaných odôvodnili a bližšie popísali pri jednotlivých experimentoch.
+        Najprv sme zvolili počet infikovaných, ktorí su na začiatku umiestnení do kinosály (prepínač -i). Vo všetkých prípadoch sme výber počiatočného počtu infikovaných odôvodnili a bližšie popísali pri jednotlivých experimentoch.
         \par Každý beh simulácie s určitými prepínačmi sme vykonali 10 krát a počty novo infikovaných návštevníkov každého behu sme sčítali a následne spriemerovali, aby sme dostali strednú hodnotu. Na základe výsledku sme začali postupne aplikovať epidemiologické opatrenia a sledovali jednotlivé výsledky.
         
         \subsection{Experimenty}
         V následujúcich podkapitolách sú výsledky našich experimentov zhrnuté v tabuľkách. Popis jednotlivých prepínačov nášho programu:
         \begin{itemize}
-            \item \textbf{-i} \textit{pocet} - udáva \textit{pocet} infikovaných v sále na začiatku predstavenia
+            \item \textbf{-i} \textit{počet} - udáva \textit{počet} infikovaných v sále na začiatku predstavenia
                 \begin{itemize}
-                    \item implicitne je \textit{pocet} infikovaných návštevníkov 10
+                    \item implicitne je \textit{počet} infikovaných návštevníkov 10
                 \end{itemize}
-            \item \textbf{-s} - v sále sa dodržujú rozostupy, tzn. jedno voľné miesto medzi návštevníkmi (kapacita kina zredukovaná o polovicu)
+            \item \textbf{-s} - v sále sa dodržujú rozostupy, tzn. jedno voľné miesto medzi návštevníkmi (kapacita kina zredukovaná o polovicu), znižuje nákazu o 13\%/meter
             \item \textbf{-x} - v sále sa dodržujú prísnejšie rozostupy, tzn. tri voľné miesta medzi návštevníkmi (kapacita je zredukovaná o 3/4)
-            \item \textbf{-m} - návštevníci majú počas celého predstavenia nasadené látkové/jednorázové rúško
-            \item \textbf{-e} - návštevníci majú počas celého predstavenia nasadený respirátor typu N95
-            \item \textbf{-v} \textit{uroven} - udáva \textit{uroven} ventilácie v kinosále
+            \item \textbf{-m} - návštevníci majú počas celého predstavenia nasadené látkové/jednorázové rúško (znižuje riziko až o 72\% $\rightarrow$ blokuje vydychovania čiastočiek do okolia o 60\% a filtruje vdychovanie čiastočiek o 30\%)
+            \item \textbf{-e} - návštevníci majú počas celého predstavenia nasadený respirátor typu N95, FFP2, FFP3 (znižuje riziko až o 99\%) 
+            \item \textbf{-v} \textit{uroveň} - udáva \textit{uroveň} ventilácie v kinosále
                 \begin{itemize}
-                    \item implicitne je \textit{uroven} nastavená na 1
-                    \item \textbf{-v 1} - v sále nie je žiadna ventilácia
-                    \item \textbf{-v 2} - v sále sa nachádza slabšia ventilácia, jej  účinnosť by sa dala prirovnať k nárazovému otvoreniu okien v miestnosti
-                    \item \textbf{-v 3} - v sále je dostupná kvalitná ventilácia vzduchu
-                    \item \textbf{-v 4} - v sále je dostupná kvalitná ventilácia spolu s čističkou vzduchu
+                    \item implicitne je \textit{uroveň} nastavená na 1
+                    \item \textbf{-v 1} - v sále nie je žiadna ventilácia - prirodzené prúdenie vzduchu
+                    \item \textbf{-v 2} - v sále sa nachádza slabšia ventilácia, jej  účinnosť by sa dala prirovnať k nárazovému otvoreniu okien v miestnosti (znižuje riziko nákazy až o 60\%)
+                    \item \textbf{-v 3} - v sále je dostupná kvalitná ventilácia vzduchu (znižuje riziko nákazy až o 80\%)
+                    \item \textbf{-v 4} - v sále je dostupná kvalitná ventilácia spolu s čističkou vzduchu typu \emph{HEPA} (znižuje riziko nákazy až o 90\%) \cite{joslelieveldfrankhelleiset.al.2020}
                 \end{itemize}
         \end{itemize}
         
@@ -151,11 +180,11 @@
         
         \subsubsection{Experiment č. 1}
         \label{sec:ex.1}
-        V prvom experimente sme zvolili počiatočnú hodnotu infikovaných v kine \texttt{-i 2}. Toto číslo sme získali na základe momentálnej incidencie vírusu na Slovensku\footnote{\href{https://www.arcgis.com/apps/opsdashboard/index.html\#/bda7594740fd40299423467b48e9ecf6}{https://www.arcgis.com/apps/opsdashboard/index.html\#/bda7594740fd40299423467b48e9ecf6}}.
+        V prvom experimente sme zvolili počiatočnú hodnotu infikovaných v kine \texttt{-i 2}. Toto číslo sme získali na základe momentálnej incidencie vírusu na Slovensku\footnote{\href{https://www.arcgis.com/apps/opsdashboard/index.html\#/bda7594740fd40299423467b48e9ecf6}{https://www.arcgis.com/apps/opsdashboard/index.html\#/bda7594740fd40299423467b48e9ecf6}} (Riziko prítomnosti infikovaného pri organizovaní n-početného eventu \footnote{\href{https://covid19risk.biosci.gatech.edu/}{https://covid19risk.biosci.gatech.edu/}}).
         
         \par V následujúcej tabuľke prezentujeme počty novo nakazených ľudí po skončení predstavenia v kine a mieru nakazenosti predtým zdravých návštevníkov. V prvom stĺpci sú jednotlivé úrovne ventilácie, v hlavičke tabuľky aplikované opatrenia. Našim cieĺom je aplikovať také opatrenia, aby hranica novo infikovaných ľudí neprekročila 3\%.
         
-        \begin{table}[]
+        \begin{table}[h]
             \resizebox{\textwidth}{!}{
             \begin{tabular}{|
             >{\columncolor[HTML]{FFCCC9}}c |c|r|c|r|c|r|c|r|c|r|c|r|c|r|c|r|c|r|}
@@ -188,7 +217,7 @@
             $$ \frac{1312}{28262} * 100 \doteq 4\% $$
             
             \par Po získaní pomeru v percentách, sme aplikovali túto hodnotu na náš model a našu kapacitu kina.
-            $$ \frac{4}{100} * 200 = 8\% $$
+            $$ \frac{4}{100} * 200 = 8 $$
             
             \begin{table}[h]
             \resizebox{\textwidth}{!}{
@@ -241,13 +270,13 @@
     \end{table}
     
     \subsection{Závery experimentov}
-        V \hyperref[sec:ex.1]{experimente č. 1} by sme na základe získaných výsledkov mohli nechať kiná otvorené len pokiaľ disponujú minimálne kvalitnou ventiláciou vzduchu, každý návštevník kina by mal počas celého pobytu v sále nasadené rúško, prípadne by sa dodržiavali rozostupy. V týchto prípadoch by došlo k nakazeniu okolo 2\% návštevníkov a menej. Pri kinách, ktoré by disponovali slabšou ventiláciou, by stačilo minimálne udržiavanie prísnejších rozostupov a riziko nakazenia by bolo nulové. Kiná, ktoré ventiláciou nedisponujú by potrebovali zabezpečiť prísnejšie rozostupy a minimálne klasické rúška na tvárach návštevníkov aby eliminovali riziko nákazy alebo by do kina boli pustený len návštevníci s respirátormi typu N95.
-        \par V \hyperref[sec:ex.2]{experimente č. 2} by sme na základe získaných výsledkov mohli nechať otvorené kiná, všetky kiná, ktoré by zabezpečili prísne rozostupy a návštevníci by mali nasadené klasické rúška, prípadne by sa rozostupy dodržiavať nemuseli, ale vstup by bol povolený len s respirátorom typu N95. Výnimku by mali kiná s aspoň kvalitnou ventiláciou vzduchu, kde by si ľudia mohli vychnutnať film aj bez rúška, avšak s prísnymi rozostupmi.
+        V \hyperref[sec:ex.1]{experimente č. 1} by sme na základe získaných výsledkov mohli nechať kiná otvorené len pokiaľ disponujú aspoň kvalitnou ventiláciou vzduchu, každý návštevník kina by mal počas celého pobytu v sále nasadené rúško, prípadne by sa dodržiavali rozostupy. V týchto prípadoch by došlo k nakazeniu okolo 2\% návštevníkov a menej. Pri kinách, ktoré by disponovali slabšou ventiláciou, by stačilo udržiavanie prísnejších rozostupov a riziko nakazenia by bolo nulové. V kinách, kde sa ventilácia nenachádza, by potrebovali zabezpečiť prísnejšie rozostupy a minimálne klasické rúška na tvárach návštevníkov aby eliminovali riziko nákazy alebo by do kina boli pustení len návštevníci s respirátormi typu N95.
+        \par V \hyperref[sec:ex.2]{experimente č. 2} by sme na základe získaných výsledkov mohli nechať otvorené všetky kiná, ktoré by zabezpečili prísne rozostupy a návštevníci by mali nasadené klasické rúška, prípadne by sa rozostupy dodržiavať nemuseli, ale vstup by bol povolený len s respirátorom typu N95. Výnimku by mali kiná s aspoň kvalitnou ventiláciou vzduchu, kde by si ľudia mohli vychnutnať film aj bez rúška, avšak s prísnymi rozostupmi.
         \par V \hyperref[sec:ex.2]{experimente č. 3} sme na základe získaných výsledkov zistili, že na to aby kino mohlo pomýšľať na otvorenie by musela byť zabezpečená ventilácia alebo dodržovať prísne rozostupy spolu s respirátormi typu N95 nasadenými na tvárach návštevníkov. Inak by mohli byť kiná otvorené, tak ako v \hyperref[sec:ex.2]{experimente č. 2}.
         
     \section{Zhrnutie simulačných experimentov a záver}
-    Výsledky našich experimentov jednoznačne napovedajú tomu, že za určitých podmienok by kiná mohli byť otvorené aj počas pandémie. Ako jedným z najlepších riešení sa preukázali prísne rozostupy medzi návštevníkmi kina (až 3 voľné miesta) v kombinácii s ochranou dýchacích ciest a úst za pomoci klasického látkového či jednorázového rúška. Alternatívou by bolo aj používanie respirátora N95 v kinosálach, ale tie sú v dnešnej dobe drahé a nie každý zákazník ním disponuje.
-	\newpage
+    Výsledky našich experimentov jednoznačne napovedajú tomu, že za určitých podmienok by kiná mohli byť otvorené aj počas pandémie. Ako jedným z najlepších riešení sa preukázali prísne rozostupy medzi návštevníkmi kina (až 3 voľné miesta) v kombinácii s ochranou dýchacích ciest a úst za pomoci klasického látkového či jednorázového rúška. Alternatívou by bolo aj používanie respirátora N95 v kinosálach, ale tie sú v dnešnej dobe drahé a nie každý zákazník ním disponuje. Niektoré opatrenia by potrebovali aj výraznejšiu rekonštrukciu kinosál (výmena za kvalitnejšiu filtráciu vzduchu), čo znamená zvýšené výdavky, prípadne by opatrenia museli byť nastavované pre každú kinosálu zvlášť. Ďalší problém, prečo by opatrenia nemuseli byť efektívne je z dôvodu disciplinovanosti občanov, kde by stačil jeden infikovaný, ktorý nedodržuje pravidlá a riziko by sa násobne zvýšilo.
+    \newpage
     \bibliographystyle{czechiso}
     \renewcommand{\refname}{Bibliografia}
     \label{sec:bib}

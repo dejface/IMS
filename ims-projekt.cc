@@ -160,8 +160,8 @@ int newState(int actual_state, int infectedcount, int new_infectedcount, int mod
             Ri = (1 - pow((1 - P_rna), viral_copies)) * 100;         
         } else {
             viral_copies = 20 * model_time * (new_infectedcount /2);  
-            Ri = (1 - pow((1 - P_rna), viral_copies)) / 2 * 100;  //3 feet rule https://www.upi.com/Health_News/2020/06/01/At-least-3-feet-of-social-distancing-likely-reduces-COVID-19-spread-study-confirms/7431591040809/     
-            // Ri *= 1/dist_from_infected; // longer distance, lower risk --toto sposobovalo najma to blbnutie
+            Ri = (1 - pow((1 - P_rna), viral_copies)) / 2 * 100;  
+            //3 feet rule https://www.upi.com/Health_News/2020/06/01/At-least-3-feet-of-social-distancing-likely-reduces-COVID-19-spread-study-confirms/7431591040809/     
         }
         if (masks){
             Ri *= 0.4 * 0.7; // 60% effectiveness in blocking viral particles, 30% filtering  
@@ -178,6 +178,7 @@ int newState(int actual_state, int infectedcount, int new_infectedcount, int mod
         if (effective_mask){
             Ri *= 0.01; 
         }
+
         // CALCULATOR: https://www.mpic.de/4747361/risk-calculator?en
         // when empty seats contain enough viral copies in the area to get infected
         if (actual_state == FORBIDDEN_SITTING || actual_state == FORBIDDEN_SITTING_INFECTED){
