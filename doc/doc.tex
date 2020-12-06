@@ -118,7 +118,7 @@
     
         \subsection{Simulačné rovnice}
         V simulácií uvažujeme so vždy vydezinfikovanou sálou, čo znamená, že sledujeme riziko nákazy pochádzajúce, len od práve prítomného infikovaného človeka a neprichádza k nakazeniu prostredníctvom pozostatkov vírusu na povrchoch. Simulujeme mikro systém, je preto potrebné sa zamerať na iné premenné ovplyvňujúce nákazu ako v ponímaní makro systému. Dôležité je pre nás prúdenie vzduchu, čas a potrebná vírusová dávka, ktorá môže spôsobiť nakazenie sa.   
-        \par Rovnica použitá v simulácií závisí od faktoru \textbf{D50}, ktorá značí počet vírusových kópií, ktoré človek príjme, aby sa prejavila nákaza u 50\% obyvateľstva. Jej hodnota sa pre Covid19 nastavila na hodnote \textit{316} \cite{joslelieveldfrankhelleiset.al.2020}.
+        \par Rovnica použitá v simulácií závisí od faktoru \textbf{D50}, ktorá značí počet vírusových kópií, ktoré človek príjme, aby sa prejavila nákaza u 50\% obyvateľstva. Jej hodnota sa pre Covid19 nastavila na hodnotu \textit{316} \cite{joslelieveldfrankhelleiset.al.2020}.
         
         \subsubsection{Odvodené rovnice s faktorom D50}
         Pravdepodobnosť nakazenia sa z jednej vírusovej zložky je teda:
@@ -211,7 +211,7 @@
         
         \subsubsection{Experiment č. 2}
         \label{sec:ex.2}
-            V druhom experimente sme zvolili počiatočnú hodnotu infikovaných v kine \texttt{-i 8}. Toto číslo bolo vypočítané na základe percentuálneho vyjadrenia pomeru počtu pozitívnych ľudí zachytených na antigénovom teste a počtu vykonaných antigénových testov zo dňa 4.12.2020\footnote{\href{https://korona.gov.sk/koronavirus-na-slovensku-v-cislach/}{https://korona.gov.sk/koronavirus-na-slovensku-v-cislach/}}.
+            V druhom experimente sme zvolili počiatočnú hodnotu infikovaných v kine \texttt{-i 8}. Toto číslo bolo vypočítané na základe percentuálneho vyjadrenia pomeru počtu pozitívnych ľudí zachytených na antigénovom teste a počtu vykonaných antigénových testov zo dňa 4.12.2020\footnote{\href{https://korona.gov.sk/koronavirus-na-slovensku-v-cislach/}{https://korona.gov.sk/koronavirus-na-slovensku-v-cislach/}}. Nakoľko ľudia chodia na tieto testy dobrovolne a nie na odporúčanie lekára či úradu verejného zdravotníctva, uvažovali sme, že percento pozitívnych odpovedá momentálnej incidencii v krajine.
             
             \par Počet pozitívne testovaných bol \texttt{1312} a testov bolo vykonaných \texttt{28262}.
             $$ \frac{1312}{28262} * 100 \doteq 4\% $$
