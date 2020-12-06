@@ -11,6 +11,7 @@
 \usepackage[unicode]{hyperref}
 \usepackage{listings}
 \usepackage{color}
+\usepackage[table,xcdraw]{xcolor}
 
 
 \begin{document}
@@ -54,7 +55,7 @@
 	\par Ochorenie postihlo celý svet a tak po roku od prvého prípadu sa stále nachádza v pandemickej kríze. COVID-19 zasiahol do života ľudí a v boji proti tejto pandémii musia vlády všetkých krajín zavádzať opatrenia, ktoré pomôžu zabrániť šíreniu. Väčšina týchto opatrení má devastačné následky v oblasti ekonomiky, kultúry, športu, ale aj psychického zdravia ľudí.
 	\newline
 	
-	\par V súvislosti s touto problematikou sme sa rozhodli zamerať na skúmanie šírenia koronavírusu v oblasti kultúry, konrétne kinematografie. Našim cieľom je zistiť, akým spôsobom sa vírus môže šíriť medzi ľuďmi, ktorí sú uzavretí v realtívne malom priestore (kinosále) a ako znížiť riziko nákazy bez potreby zavádzania drastických opatrení.
+	\par V súvislosti s touto problematikou sme sa rozhodli zamerať na skúmanie šírenia koronavírusu v oblasti kultúry, konrétne kinematografie. Našim cieľom je zistiť, akým spôsobom sa vírus môže šíriť medzi ľuďmi, ktorí sú uzavretí v relatívne malom priestore (kinosále) a ako znížiť riziko nákazy bez potreby zavádzania drastických opatrení.
 	
     	\subsection{Zdroje faktov}
     	    \subsubsection{Autori}
@@ -67,14 +68,18 @@
     	    Ako primárne zdroje pre našu štúdiu a zároveň \uv{odrazový mostík} sme použili \cite{maxbrenner2020}, \cite{charlesconnor2020} a \cite{joslelieveldfrankhelleiset.al.2020}. Ostatné literárne zdroje sú uvedené v sekcii \hyperref[sec:bib]{Bibliografia}.
 	    
 	\section{Rozbor témy}
-	\par COVID-19 je relatívne nový vírus a preto o ňom vieme stále málo. Jeho špecifickosť spočíva v tom, že sa neprejavuje u každého človeka rovnakým spôsobom. Inkubačná doba vírusu je od 2 do 14 dní, pričom infekciu je možné prenášať aj počas inkubačnej doby (v období bez príznakov ochorenia). Spôsob prenášania vírusu je prostredníctvom kvapôčok, ktoré sú vylučované pri kašli, kýchaní či rozprávaní. V ohrození sú najmä ľudia, ktorí sú v kontakte s nakazeným dlhšie ako 15 minút a ich odstup je menší než 2 metre \cite{wikipedia}. 
+	\par COVID-19 je relatívne nový vírus a preto o ňom vieme stále málo. Jeho špecifickosť spočíva v tom, že sa neprejavuje u každého človeka rovnakým spôsobom. Inkubačná doba vírusu je od 2 do 14 dní, pričom infekciu je možné prenášať aj počas inkubačnej doby (v období bez príznakov ochorenia). Častý prípad je aj asymptomatický priebeh ochorenia, nastáva až v 1/5 všetkých prípadov \cite{asymptomatic}, pričom aj títo pacienti sú stále rovnako infekční \cite{asymptomaticinfectious}. Spôsob prenášania vírusu je prostredníctvom kvapôčok, ktoré sú vylučované pri kašli, kýchaní či rozprávaní, alebo spievaní a následne sa čiastočky s vírusom dostanú do tela človeka, prostredníctvom slizníc. V ohrození sú najmä ľudia, ktorí sú v kontakte s nakazeným dlhšie ako 15 minút a ich odstup je menší než 2 metre \cite{wikipedia}. 
 	
-	\par V tejto štúdii sa zameriavame na modelovanie šírenia nákazy v kinosále počas filmového predstavenia. Na základe štúdie \cite{joslelieveldfrankhelleiset.al.2020} sme zostavili potrebné rovnice, ktoré pomôžu monitorovať priebeh nákazy medzi návštevníkmi kina. Pre náš model je využitý celulárny automat.
+	\par V tejto štúdii sa zameriavame na modelovanie šírenia nákazy v kinosále počas filmového predstavenia. Nakoľko v kine strávime pomerne krátku dobu a pohyb je statický, nie je vhodné použiť na simulovanie ochorenia klasický model \textbf{SIR} \cite{basicmodels}, nakoľko nedochádza k uzdraveniu nakazených, ale je potrebné sa zamerať najmä na šírenie kvapôčok a potenciálnu nákazu zdravého človeka. Na základe štúdie \cite{joslelieveldfrankhelleiset.al.2020} sme zostavili potrebné rovnice, ktoré pomôžu monitorovať priebeh nákazy medzi návštevníkmi kina s určitými opatreniami. Pre náš model je využitý celulárny automat.
 	
-	Možno tu ešte niečo dopísať I am Lost
+	%Možno tu ešte niečo dopísať I am Lost ja tu este dopisem sracky z tej studie a vysvetlim jednotlive vyznamy opatreni, ale teraz no energy to do such a thing.
+	
+	%niekde napcham aj overovanie validity pomcou tej kalkulacky a aj podla niektorzch tych mapiek
+	%vlastne mam cely zoznam veci ktore tu chcem napisat, mam to na papieri co vsetko :D
+	%len neviem do akych kapitol mam rozobrat tu studiu, ze ci tu v rozbore alebo inde
 	
 	    \subsection{Celulárny automat}
-        Na experimenty je využitý celulárny automat (CA), pomocou ktorého sledujeme šírenie nákazy medzi jednotlivými bunkami (návštevníkmi kina). CA je definovaný niekoľkými prvkami \cite{petrperingermartinhruby}.	
+        Na experimenty je využitý celulárny automat (CA), pomocou ktorého sledujeme šírenie nákazy medzi jednotlivými bunkami (návštevníkmi kina). CA je definovaný niekoľkými prvkami [IMS/209].	
         \begin{itemize}
             \item \textbf{Bunka} - základný element, môže byť v jednom z konečného počtu stavov
             \item \textbf{Pole buniek} - n-rozmerné, rovnomerné rozdelenie priestoru
@@ -86,31 +91,162 @@
     \section{Koncepcia modelu}
     V našom modeli skúmame šírenie vírusu za rôznych podmienok. Podmienky (opatrenia) záležia na uživateľskom vstupe. Náš model podporuje opatrenia v kinosálach: 
         \begin{itemize}
-            \item návštevníci majú povinne nasadené rúška
-            \item v kinosále je striedavé sedenie (1 voľná sedačka medzi návštevníkmi sediacimi v jednej rade)
-            \item v kine je zapnutá ventilácia vzduchu
+            \item návštevníci majú povinne nasadené rúška (buď klasické chirurgické, látkové, alebo respirátory, masky s vysokou efektivitou a filtráciou)
+            \item v kinosále je striedavé sedenie (1 voľná sedačka medzi návštevníkmi sediacimi v jednej rade, prípadne 3 voľné sedačky pri ešte prísnejšom pravidle)
+            \item v kine je zapnutá ventilácia vzduchu (v rôznych stupňoch účinnosti)
         \end{itemize}
-    Na základe týchto opatrení skúmame šírenie vírusu medzi návštevníkmi počas filmu. Predpokladáme vždy, že je sála vypredaná a teda všetky miesta, na ktorých je práve umožnené sedieť, sú obsadené.
+    Na základe týchto opatrení skúmame šírenie vírusu medzi návštevníkmi počas filmu. Predpokladáme vždy, že je sála vypredaná a teda všetky miesta, na ktorých je práve umožnené sedieť, sú obsadené. Sála je pred každým predstavením riadne vydezinkfikovaná, aby sa zabránilo čiastočkám vírusu na povrchoch.
     
         \subsubsection{Stavy bunky}
-        Bunky môžu byť v jednom z následujúcich stavov \{-1,0,1,2\}.
+        Bunky môžu byť v jednom z následujúcich stavov \{-2,-1,0,1,2\}.
         \begin{itemize}
+            \item \textbf{-2} je stav, ktorý značí prázdne miesto pri obmedzenej kapacite, ktoré vo svojom okolí obsahuje dostatok virovej nálože k vyvolaniu ochorenia.
             \item \textbf{-1} je stav, ktorý reprezentuje zakázané sedenie (pri opatrení na obmedzenie kapacity kinosály)
             \item \textbf{0} je stav, ktorým disponuje zdravý návštevník kina
             \item \textbf{1} je stav, ktorým disponuje nakazený návštevník kina
             \item \textbf{2} je stav, kedy je na zdravého návštevníka prenesený vírus počas pobytu v kinosále
             \begin{itemize}
                 \item v tomto prípade však nakazený návštevník nie je hneď infekčný a neroznáša vírus
+                \item zároveň signalizuje pre svoje okolie, že v jeho blízkosti sa nachádza virová nálož dostatočná na spôsobenie infekcie Covid19 
             \end{itemize}
         \end{itemize}
         
         \subsubsection{Pole buniek}
-        Pole buniek reprezentuje kinosálu. Kapacita kinosály je 200 osôb, pri čom sedadlá sú rozdelené do 10 radov po 20 miest. Výnimkou, kedy má sála obmedzenú kapacitu, je pri zavedení opatrenia na striedavé sedenie. Vtedy je kapacita sály 100 miest. Tak ako už bolo spomenuté, predpokladáme zaplnenie sály vždy na 100\%.
+        Pole buniek reprezentuje kinosálu. Kapacita kinosály je 200 osôb, pri čom sedadlá sú rozdelené do 10 radov po 20 miest. Výnimkou, kedy má sála obmedzenú kapacitu, je pri zavedení opatrenia na striedavé sedenie. Vtedy je kapacita sály 100 miest. Prípadne pri ešte prísnejšom opatrení je voľné až každé štvrté miesto a teda kapacita 50 miest. Tak ako už bolo spomenuté, predpokladáme zaplnenie sály vždy na 100\%.
         
         \subsubsection{Okolie}
-        Model ráta s okolím bunky typu \texttt{Moore}, čiže 3x3. To znamená, že vírus sa môže šíriť od všetkých susediacich buniek \cite{petrperingermartinhruby}.
+        Model ráta s okolím bunky typu \texttt{Moore}, čiže 3x3. To znamená, že vírus sa môže šíriť od všetkých susediacich buniek [IMS/210].
     
+        % tu by som doplnil este mozno pravidla automatu, ze ako sa menia stavy
+        
+    \section{Podstata simulačných experimentov a ich priebeh}
+        \par Cieľom našich experimentov je zistiť, koľko percent návševníkov sa infikuje počas 2 hodinového sledovania filmu v kine. Následne skúmame akými spôsobmi (opatreniami) toto percento znížiť, aby ľudia naďalej mohli kiná navštevovať.
+        
+        \subsection{Postup pri experimentovaní}
+        Najprv sme zvolili počet infikovaných, ktorí su na začiatku umiestnení do kinosáli (prepínač -i). Vo všetkých prípadoch sme výber počiatočného počtu infikovaných odôvodnili a bližšie popísali pri jednotlivých experimentoch.
+        \par Každý beh simulácie s určitými prepínačmi sme vykonali 10 krát a počty novo infikovaných návštevníkov každého behu sme sčítali a následne spriemerovali, aby sme dostali strednú hodnotu. Na základe výsledku sme začali postupne aplikovať epidemiologické opatrenia a sledovali jednotlivé výsledky.
+        
+        \subsection{Experimenty}
+        V následujúcich podkapitolách sú výsledky našich experimentov zhrnuté v tabuľkách. Popis jednotlivých prepínačov nášho programu:
+        \begin{itemize}
+            \item \textbf{-i} \textit{pocet} - udáva \textit{pocet} infikovaných v sále na začiatku predstavenia
+                \begin{itemize}
+                    \item implicitne je \textit{pocet} infikovaných návštevníkov 10
+                \end{itemize}
+            \item \textbf{-s} - v sále sa dodržujú rozostupy, tzn. jedno voľné miesto medzi návštevníkmi (kapacita kina zredukovaná o polovicu)
+            \item \textbf{-x} - v sále sa dodržujú prísnejšie rozostupy, tzn. tri voľné miesta medzi návštevníkmi (kapacita je zredukovaná o 3/4)
+            \item \textbf{-m} - návštevníci majú počas celého predstavenia nasadené látkové/jednorázové rúško
+            \item \textbf{-e} - návštevníci majú počas celého predstavenia nasadený respirátor typu N95
+            \item \textbf{-v} \textit{uroven} - udáva \textit{uroven} ventilácie v kinosále
+                \begin{itemize}
+                    \item implicitne je \textit{uroven} nastavená na 1
+                    \item \textbf{-v 1} - v sále nie je žiadna ventilácia
+                    \item \textbf{-v 2} - v sále sa nachádza slabšia ventilácia, jej  účinnosť by sa dala prirovnať k nárazovému otvoreniu okien v miestnosti
+                    \item \textbf{-v 3} - v sále je dostupná kvalitná ventilácia vzduchu
+                    \item \textbf{-v 4} - v sále je dostupná kvalitná ventilácia spolu s čističkou vzduchu
+                \end{itemize}
+        \end{itemize}
+        
+        V našich experimentoch taktiež rátame s tým, že po každom predstavení je sála dôkladne vydezinfikovaná.
+        
+        \subsubsection{Experiment č. 1}
+        \label{sec:ex.1}
+        V prvom experimente sme zvolili počiatočnú hodnotu infikovaných v kine \texttt{-i 2}. Toto číslo sme získali na základe momentálnej incidencie vírusu na Slovensku\footnote{\href{https://www.arcgis.com/apps/opsdashboard/index.html\#/bda7594740fd40299423467b48e9ecf6}{https://www.arcgis.com/apps/opsdashboard/index.html\#/bda7594740fd40299423467b48e9ecf6}}.
+        
+        \par V následujúcej tabuľke prezentujeme počty novo nakazených ľudí po skončení predstavenia v kine a mieru nakazenosti predtým zdravých návštevníkov. V prvom stĺpci sú jednotlivé úrovne ventilácie, v hlavičke tabuľky aplikované opatrenia. Našim cieĺom je aplikovať také opatrenia, aby hranica novo infikovaných ľudí neprekročila 3\%.
+        
+        \begin{table}[]
+            \resizebox{\textwidth}{!}{
+            \begin{tabular}{|
+            >{\columncolor[HTML]{FFCCC9}}c |c|r|c|r|c|r|c|r|c|r|c|r|c|r|c|r|c|r|}
+            \hline
+             &
+              \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}bez opatrení} &
+              \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-s} &
+              \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-m} &
+              \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-s -m} &
+              \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-x} &
+              \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-x -m} &
+              \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-e} &
+              \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-e -s} &
+              \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-e -x} \\ \hline
+            -v 1 & 71 & 35.86\% & 24 & 24.49\% & 21 & 10.61\% & 7 & 7.14\% & 7 & 14.58\% & 0 & 0\% & 0 & 0\% & 0 & 0\% & 0 & 0\% \\ \hline
+            -v 2 & 26 & 13.13\% & 10 & 10.20\% & 7  & 3.54\%  & 4 & 4.08\% & 0 & 0\%     & 0 & 0\% & 0 & 0\% & 0 & 0\% & 0 & 0\% \\ \hline
+            -v 3 & 13 & 6.57\%  & 6  & 6.12\%  & 4  & 2.02\%  & 2 & 2.04\% & 0 & 0\%     & 0 & 0\% & 0 & 0\% & 0 & 0\% & 0 & 0\% \\ \hline
+            -v 4 & 9  & 4.55\%  & 3  & 3.06\%  & 2  & 1.01\%  & 1 & 1.02\% & 0 & 0\%     & 0 & 0\% & 0 & 0\% & 0 & 0\% & 0 & 0\% \\ \hline
+            \end{tabular}
+            }
+        \end{table}
+        
+        \par
+        
+        \subsubsection{Experiment č. 2}
+        \label{sec:ex.2}
+            V druhom experimente sme zvolili počiatočnú hodnotu infikovaných v kine \texttt{-i 8}. Toto číslo bolo vypočítané na základe percentuálneho vyjadrenia pomeru počtu pozitívnych ľudí zachytených na antigénovom teste a počtu vykonaných antigénových testov zo dňa 4.12.2020\footnote{\href{https://korona.gov.sk/koronavirus-na-slovensku-v-cislach/}{https://korona.gov.sk/koronavirus-na-slovensku-v-cislach/}}.
+            
+            \par Počet pozitívne testovaných bol \texttt{1312} a testov bolo vykonaných \texttt{28262}.
+            $$ \frac{1312}{28262} * 100 \doteq 4\% $$
+            
+            \par Po získaní pomeru v percentách, sme aplikovali túto hodnotu na náš model a našu kapacitu kina.
+            $$ \frac{4}{100} * 200 = 8\% $$
+            
+            \begin{table}[h]
+            \resizebox{\textwidth}{!}{
+                \begin{tabular}{|
+                >{\columncolor[HTML]{FFCCC9}}c |c|r|c|r|c|r|c|r|c|r|c|r|c|r|c|r|c|r|}
+                \hline
+                 &
+                  \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}bez opatrení} &
+                  \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-s} &
+                  \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-m} &
+                  \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-s -m} &
+                  \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-x} &
+                  \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-x -m} &
+                  \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-e} &
+                  \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-e -s} &
+                  \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-e -x} \\ \hline
+                -v 1 & 157 & 81.77\% & 66 & 71.74\% & 57 & 29.69\% & 24 & 26.09\% & 19 & 45.24\% & 1 & 2.38\% & 2 & 1.04\% & 1 & 1.09\% & 0 & 0\% \\ \hline
+                -v 2 & 88  & 45.83\% & 31 & 33.70\% & 28 & 14.58\% & 11 & 11.96\% & 2  & 4.76\%  & 0 & 0\%    & 1 & 0.52\% & 0 & 0\%    & 0 & 0\% \\ \hline
+                -v 3 & 51  & 26.56\% & 20 & 21.74\% & 15 & 7.81\%  & 7  & 7.61\%  & 0  & 0\%     & 0 & 0\%    & 0 & 0\%    & 0 & 0\%    & 0 & 0\% \\ \hline
+                -v 4 & 28  & 14.58\% & 12 & 13.04\% & 10 & 5.21\%  & 4  & 4.35\%  & 0  & 0\%     & 0 & 0\%    & 0 & 0\%    & 0 & 0\%    & 0 & 0\% \\ \hline
+                \end{tabular}
+            }
+        \end{table}
+        
+    \subsubsection{Experiment č. 3}
+    \label{sec:ex.3}
+    \par  V treťom experimente sme zvolili počiatočnú hodnotu infikovaných v kine \texttt{-i 30}. Táto hodnota bola vybratá za účelom zistiť, ako by to vypadalo keby sa situácia s pandémiou na Slovensku ešte zhoršila.
+
+    \begin{table}[h]
+        \resizebox{\textwidth}{!}{
+            \begin{tabular}{|
+            >{\columncolor[HTML]{FFCCC9}}c |c|r|c|r|c|r|c|r|c|r|c|r|c|r|c|r|c|r|}
+            \hline
+             &
+              \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}bez opatrení} &
+              \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-s} &
+              \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-m} &
+              \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-s -m} &
+              \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-x} &
+              \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-x -m} &
+              \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-e} &
+              \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-e -s} &
+              \multicolumn{2}{c|}{\cellcolor[HTML]{FFCCC9}-e -x} \\ \hline
+            -v 1 & 169 & 99.41\% & 68 & 97.14\% & 126 & 74.12\% & 51 & 72.86\% & 18 & 90\% & 2 & 10\% & 11 & 6.47\% & 4 & 5.71\% & 0 & 0\% \\ \hline
+            -v 2 & 140 & 82.35\% & 52 & 74.29\% & 71  & 41.76\% & 30 & 42.86\% & 6  & 30\% & 0 & 0\%  & 4  & 2.35\% & 1 & 1.43\% & 0 & 0\% \\ \hline
+            -v 3 & 110 & 64.71\% & 42 & 60\%    & 43  & 25.29\% & 18 & 25.71\% & 0  & 0\%  & 0 & 0\%  & 1  & 0.59\% & 0 & 0\%    & 0 & 0\% \\ \hline
+            -v 4 & 68  & 40\%    & 28 & 40\%    & 24  & 14.12\% & 10 & 14.29\% & 0  & 0\%  & 0 & 0\%  & 1  & 0.59\% & 0 & 0\%    & 0 & 0\% \\ \hline
+            \end{tabular}
+        }
+    \end{table}
     
+    \subsection{Závery experimentov}
+        V \hyperref[sec:ex.1]{experimente č. 1} by sme na základe získaných výsledkov mohli nechať kiná otvorené len pokiaľ disponujú minimálne kvalitnou ventiláciou vzduchu, každý návštevník kina by mal počas celého pobytu v sále nasadené rúško, prípadne by sa dodržiavali rozostupy. V týchto prípadoch by došlo k nakazeniu okolo 2\% návštevníkov a menej. Pri kinách, ktoré by disponovali slabšou ventiláciou, by stačilo minimálne udržiavanie prísnejších rozostupov a riziko nakazenia by bolo nulové. Kiná, ktoré ventiláciou nedisponujú by potrebovali zabezpečiť prísnejšie rozostupy a minimálne klasické rúška na tvárach návštevníkov aby eliminovali riziko nákazy alebo by do kina boli pustený len návštevníci s respirátormi typu N95.
+        \par V \hyperref[sec:ex.2]{experimente č. 2} by sme na základe získaných výsledkov mohli nechať otvorené kiná, všetky kiná, ktoré by zabezpečili prísne rozostupy a návštevníci by mali nasadené klasické rúška, prípadne by sa rozostupy dodržiavať nemuseli, ale vstup by bol povolený len s respirátorom typu N95. Výnimku by mali kiná s aspoň kvalitnou ventiláciou vzduchu, kde by si ľudia mohli vychnutnať film aj bez rúška, avšak s prísnymi rozostupmi.
+        \par V \hyperref[sec:ex.2]{experimente č. 3} sme na základe získaných výsledkov zistili, že na to aby kino mohlo pomýšľať na otvorenie by musela byť zabezpečená ventilácia alebo dodržovať prísne rozostupy spolu s respirátormi typu N95 nasadenými na tvárach návštevníkov. Inak by mohli byť kiná otvorené, tak ako v \hyperref[sec:ex.2]{experimente č. 2}.
+        
+    \section{Zhrnutie simulačných experimentov a záver}
+    Výsledky našich experimentov jednoznačne napovedajú tomu, že za určitých podmienok by kiná mohli byť otvorené aj počas pandémie. Ako jedným z najlepších riešení sa preukázali prísne rozostupy medzi návštevníkmi kina (až 3 voľné miesta) v kombinácii s ochranou dýchacích ciest a úst za pomoci klasického látkového či jednorázového rúška. Alternatívou by bolo aj používanie respirátora N95 v kinosálach, ale tie sú v dnešnej dobe drahé a nie každý zákazník ním disponuje.
 	\newpage
     \bibliographystyle{czechiso}
     \renewcommand{\refname}{Bibliografia}
